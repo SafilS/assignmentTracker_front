@@ -107,7 +107,7 @@ function Assignments() {
           </h1>
           <p className="header-subtitle">
             Manage and create assignments for your students
-            <span className="subtitle-emoji">🎓</span>
+            <span className="subtitle-emoji"></span>
           </p>
         </div>
 
@@ -295,7 +295,7 @@ function Assignments() {
             </div>
           ) : filteredAndSortedAssignments.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📝</div>
+              <div className="empty-icon"></div>
               <h3 className="empty-title">
                 {searchTerm ? 'No assignments found' : 'No assignments yet!'}
               </h3>
@@ -304,7 +304,7 @@ function Assignments() {
                   ? 'Try adjusting your search terms or filters' 
                   : 'Create your first assignment to get started'
                 }
-                <span className="empty-emoji">🚀</span>
+                <span className="empty-emoji"></span>
               </p>
               {!searchTerm && (
                 <button
@@ -354,11 +354,11 @@ function Assignments() {
                       
                       <div className="card-actions">
                         <button className="action-btn view-btn">
-                          <span>👁️</span>
+                          <span></span>
                           <span>View</span>
                         </button>
                         <button className="action-btn edit-btn">
-                          <span>✏️</span>
+                          <span></span>
                           <span>Edit</span>
                         </button>
                       </div>
