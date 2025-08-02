@@ -64,11 +64,11 @@ function Navibar() {
                 to={userRole === 'TEACHER' ? '/teacher' : '/submissions/student'}
                 className="nav-link dashboard-link"
               >
-                <span className="nav-icon">{userRole === 'TEACHER' ? '📝' : '📋'}</span>
+                
                 Dashboard
               </Link>
               <button onClick={handleLogout} className="logout-btn">
-                <span className="nav-icon">🚪</span>
+                <span className="nav-icon"></span>
                 Logout
               </button>
             </div>
