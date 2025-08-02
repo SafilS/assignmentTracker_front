@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'https://assignmenttracker-rvq9.onrender.com/',
 });
 
 instance.interceptors.request.use(config => {
