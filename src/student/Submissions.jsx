@@ -393,59 +393,7 @@ function Submissions() {
           </div>
         )}
 
-        {/* Tips Section */}
-        <div className="tips-section">
-          <div className="tips-card">
-            <div className="tips-header">
-              <h3 className="tips-title">
-                <span className="tips-icon">💡</span>
-                Submission Tips
-              </h3>
-            </div>
-            
-            <div className="tips-grid">
-              <div className="tip-item">
-                <div className="tip-icon-wrapper">
-                  <span className="tip-emoji">🔗</span>
-                </div>
-                <div className="tip-content">
-                  <h4 className="tip-title">File Sharing</h4>
-                  <p className="tip-description">Use Google Drive, Dropbox, GitHub, or any public file sharing service</p>
-                </div>
-              </div>
-              
-              <div className="tip-item">
-                <div className="tip-icon-wrapper">
-                  <span className="tip-emoji">👀</span>
-                </div>
-                <div className="tip-content">
-                  <h4 className="tip-title">Permissions</h4>
-                  <p className="tip-description">Set file permissions to "Anyone with the link can view"</p>
-                </div>
-              </div>
-              
-              <div className="tip-item">
-                <div className="tip-icon-wrapper">
-                  <span className="tip-emoji">⏰</span>
-                </div>
-                <div className="tip-content">
-                  <h4 className="tip-title">Early Submission</h4>
-                  <p className="tip-description">Submit early to avoid last-minute technical issues</p>
-                </div>
-              </div>
-              
-              <div className="tip-item">
-                <div className="tip-icon-wrapper">
-                  <span className="tip-emoji">📝</span>
-                </div>
-                <div className="tip-content">
-                  <h4 className="tip-title">Double Check</h4>
-                  <p className="tip-description">Review your work carefully before submitting</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   );
