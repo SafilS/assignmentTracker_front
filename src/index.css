@@ -1,54 +1,76 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import our custom CSS file */
+@import './styles/main.css';
 
-@layer base {
-  body {
-    @apply bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen font-sans;
-  }
+/* Additional custom styles */
+.btn-accent {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
-@layer components {
-  .btn-primary {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-out;
-  }
-  
-  .btn-secondary {
-    @apply bg-gradient-to-r from-secondary-500 to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-out;
-  }
-  
-  .btn-accent {
-    @apply bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-out;
-  }
-  
-  .input-field {
-    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-300 outline-none bg-white/80 backdrop-blur-sm;
-  }
-  
-  .card {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 hover:shadow-2xl transition-all duration-300;
-  }
-  
-  .card-hover {
-    @apply transform hover:-translate-y-2 hover:scale-105 transition-all duration-300;
-  }
-  
-  .glass-effect {
-    @apply bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl;
-  }
-  
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent;
-  }
-  
-  .floating-animation {
-    animation: float 3s ease-in-out infinite;
-  }
-  
-  .pulse-glow {
-    @apply animate-pulse shadow-lg shadow-primary-500/50;
-  }
+.btn-accent:hover {
+  background: linear-gradient(to right, #d97706, #b45309);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.05);
+  transition: all 0.3s ease;
+}
+
+.glass-effect {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #0ea5e9, #8b5cf6, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.floating-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3), 0 4px 6px -2px rgba(14, 165, 233, 0.2);
 }
 
 /* Custom scrollbar */
@@ -57,15 +79,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 rounded-full;
+  background-color: #f1f5f9;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-primary-400 to-primary-600 rounded-full;
+  background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply from-primary-500 to-primary-700;
+  background: linear-gradient(to bottom, #0ea5e9, #0369a1);
 }
 
 /* Loading animation */

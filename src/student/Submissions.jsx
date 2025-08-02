@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from '../api/axiosInstance';
+import './style.css';
 
 function Submissions() {
   const [assignments, setAssignments] = useState([]);
@@ -8,6 +9,8 @@ function Submissions() {
   const [submittingIds, setSubmittingIds] = useState(new Set());
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
 
   const loadAssignments = async () => {
     setIsLoading(true);
@@ -40,7 +43,7 @@ function Submissions() {
       setFileUrls(prev => ({ ...prev, [assignmentId]: '' }));
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      setError('Failed to submit assignment. Please try again! 😅');
+      setError('Already Submitted');
     } finally {
       setSubmittingIds(prev => {
         const newSet = new Set(prev);
@@ -71,235 +74,377 @@ function Submissions() {
     return diffDays;
   };
 
+  const getAssignmentStatus = (assignment) => {
+    const daysUntilDue = getDaysUntilDue(assignment.dueDate);
+    const overdue = isOverdue(assignment.dueDate);
+    
+    if (overdue) return 'overdue';
+    if (daysUntilDue <= 3) return 'urgent';
+    return 'active';
+  };
+
+  const filteredAssignments = assignments
+    .filter(assignment => {
+      const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           assignment.description.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      if (filterStatus === 'all') return matchesSearch;
+      return matchesSearch && getAssignmentStatus(assignment) === filterStatus;
+    });
+
   useEffect(() => { loadAssignments(); }, []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center mb-4 floating-animation">
-          <span className="text-3xl">📋</span>
+    <div className="submissions-container">
+      <div className="submissions-background">
+        <div className="submissions-pattern"></div>
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
         </div>
-        <h1 className="font-display text-4xl font-bold gradient-text mb-2">
-          Assignment Submissions
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Submit your assignments and track your progress 🚀
-        </p>
       </div>
 
-      {/* Messages */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-center">
-          {error}
-        </div>
-      )}
-
-      {successMessage && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 text-center">
-          {successMessage}
-        </div>
-      )}
-
-      {/* Assignments List */}
-      {isLoading ? (
-        <div className="text-center py-12">
-          <div className="loading-dots mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading assignments...</p>
-        </div>
-      ) : assignments.length === 0 ? (
-        <div className="card text-center py-12">
-          <div className="text-6xl mb-4">📚</div>
-          <h3 className="font-display text-xl font-semibold text-gray-800 mb-2">
-            No assignments available!
-          </h3>
-          <p className="text-gray-600">
-            Check back later for new assignments from your teachers 👨‍🏫
+      <div className="submissions-content">
+        {/* Header */}
+        <div className="submissions-header">
+          <div className="header-icon">
+            <span>📋</span>
+          </div>
+          <h1 className="header-title">
+            <span className="title-main">Assignment</span>
+            <span className="title-gradient">Submissions</span>
+          </h1>
+          <p className="header-subtitle">
+            Submit your assignments and track your progress
+            <span className="subtitle-emoji">🚀</span>
           </p>
         </div>
-      ) : (
-        <div className="space-y-6">
-          {assignments.map(assignment => {
-            const daysUntilDue = getDaysUntilDue(assignment.dueDate);
-            const overdue = isOverdue(assignment.dueDate);
-            const isSubmitting = submittingIds.has(assignment.id);
+
+        {/* Messages */}
+        {error && (
+          <div className="message-banner error-banner">
+            <span className="message-icon">⚠️</span>
+            <span className="message-text">{error}</span>
+            <button 
+              onClick={() => setError('')}
+              className="message-close"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="message-banner success-banner">
+            <span className="message-icon">🎉</span>
+            <span className="message-text">{successMessage}</span>
+            <button 
+              onClick={() => setSuccessMessage('')}
+              className="message-close"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* Control Bar */}
+        <div className="control-bar">
+          <div className="search-filter-section">
+            <div className="search-wrapper">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Search assignments..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
             
-            return (
-              <div
-                key={assignment.id}
-                className={`card ${
-                  overdue 
-                    ? 'border-l-4 border-red-400 bg-red-50/50' 
-                    : daysUntilDue <= 3
-                    ? 'border-l-4 border-yellow-400 bg-yellow-50/50'
-                    : 'border-l-4 border-green-400 bg-green-50/50'
-                }`}
+            <div className="filter-wrapper">
+              <span className="filter-icon">📊</span>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="filter-select"
               >
-                <div className="flex flex-col lg:flex-row lg:items-start lg:space-x-6">
-                  {/* Assignment Info */}
-                  <div className="flex-1 mb-6 lg:mb-0">
-                    <div className="flex items-start justify-between mb-4">
-                      <h3 className="font-display text-xl font-semibold text-gray-800">
-                        {assignment.title}
-                      </h3>
-                      <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        overdue
-                          ? 'bg-red-100 text-red-700'
-                          : daysUntilDue <= 3
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-green-100 text-green-700'
-                      }`}>
-                        {overdue 
-                          ? '⏰ Overdue' 
-                          : daysUntilDue <= 3 
-                          ? `⚡ ${daysUntilDue} days left`
-                          : '✅ Active'
-                        }
-                      </div>
-                    </div>
-                    
-                    <p className="text-gray-600 mb-4 leading-relaxed">
-                      {assignment.description}
-                    </p>
-                    
-                    <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <div className="flex items-center space-x-1">
-                        <span>📅</span>
-                        <span>Due: {formatDate(assignment.dueDate)}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <span>🆔</span>
-                        <span>ID: {assignment.id}</span>
-                      </div>
-                    </div>
-                  </div>
+                <option value="all">All Assignments</option>
+                <option value="active">Active</option>
+                <option value="urgent">Due Soon</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+          </div>
 
-                  {/* Submission Form */}
-                  <div className="lg:w-80">
-                    <div className="glass-effect p-4 rounded-xl">
-                      <h4 className="font-semibold text-gray-800 mb-3 flex items-center">
-                        <span className="mr-2">📎</span>
-                        Submit Your Work
-                      </h4>
-                      
-                      <div className="space-y-3">
-                        <input
-                          type="url"
-                          value={fileUrls[assignment.id] || ''}
-                          onChange={(e) => setFileUrls(prev => ({
-                            ...prev,
-                            [assignment.id]: e.target.value
-                          }))}
-                          placeholder="Paste your file URL here (Google Drive, GitHub, etc.)"
-                          className="input-field text-sm"
-                          disabled={isSubmitting}
-                        />
-                        
-                        <button
-                          onClick={() => handleSubmit(assignment.id, assignment.title)}
-                          disabled={isSubmitting || !fileUrls[assignment.id]?.trim()}
-                          className={`w-full btn-primary text-sm py-2 ${
-                            (isSubmitting || !fileUrls[assignment.id]?.trim()) 
-                              ? 'opacity-50 cursor-not-allowed' 
-                              : ''
-                          }`}
-                        >
-                          {isSubmitting ? (
-                            <div className="flex items-center justify-center space-x-2">
-                              <div className="loading-dots scale-50">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                              </div>
-                              <span>Submitting...</span>
-                            </div>
-                          ) : (
-                            <span className="flex items-center justify-center space-x-2">
-                              <span>🚀</span>
-                              <span>Submit Assignment</span>
-                            </span>
-                          )}
-                        </button>
-                      </div>
-                      
-                      <div className="mt-3 text-xs text-gray-500">
-                        💡 Tip: Make sure your file is publicly accessible!
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          <div className="status-summary">
+            <span className="summary-item active">
+              <span className="summary-count">{assignments.filter(a => !isOverdue(a.dueDate)).length}</span>
+              <span className="summary-label">Active</span>
+            </span>
+            <span className="summary-divider">•</span>
+            <span className="summary-item urgent">
+              <span className="summary-count">{assignments.filter(a => {
+                const days = getDaysUntilDue(a.dueDate);
+                return days <= 3 && days > 0;
+              }).length}</span>
+              <span className="summary-label">Due Soon</span>
+            </span>
+            <span className="summary-divider">•</span>
+            <span className="summary-item overdue">
+              <span className="summary-count">{assignments.filter(a => isOverdue(a.dueDate)).length}</span>
+              <span className="summary-label">Overdue</span>
+            </span>
+          </div>
         </div>
-      )}
 
-      {/* Stats Section */}
-      {assignments.length > 0 && (
-        <div className="mt-12">
-          <div className="glass-effect p-8 rounded-2xl">
-            <h3 className="font-display text-xl font-semibold text-center mb-6 gradient-text">
-              📊 Your Progress
+        {/* Assignments List */}
+        {isLoading ? (
+          <div className="loading-container">
+            <div className="loading-spinner-large">
+              <div className="spinner-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <p className="loading-text">Loading assignments...</p>
+          </div>
+        ) : filteredAssignments.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">📚</div>
+            <h3 className="empty-title">
+              {searchTerm || filterStatus !== 'all' ? 'No assignments found' : 'No assignments available!'}
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-primary-600">
-                  {assignments.length}
+            <p className="empty-description">
+              {searchTerm || filterStatus !== 'all' 
+                ? 'Try adjusting your search terms or filters' 
+                : 'Check back later for new assignments from your teachers'
+              }
+              <span className="empty-emoji">👨‍🏫</span>
+            </p>
+          </div>
+        ) : (
+          <div className="assignments-list">
+            {filteredAssignments.map(assignment => {
+              const daysUntilDue = getDaysUntilDue(assignment.dueDate);
+              const overdue = isOverdue(assignment.dueDate);
+              const isUrgent = daysUntilDue <= 3 && daysUntilDue > 0;
+              const isSubmitting = submittingIds.has(assignment.id);
+              
+              return (
+                <div
+                  key={assignment.id}
+                  className={`assignment-submission-card ${overdue ? 'overdue' : isUrgent ? 'urgent' : 'active'}`}
+                >
+                  <div className="card-layout">
+                    {/* Assignment Info */}
+                    <div className="assignment-info">
+                      <div className="assignment-header">
+                        <h3 className="assignment-title">{assignment.title}</h3>
+                        <div className={`status-badge ${overdue ? 'overdue' : isUrgent ? 'urgent' : 'active'}`}>
+                          {overdue 
+                            ? '⏰ Overdue' 
+                            : isUrgent 
+                            ? `⚡ ${daysUntilDue} days left`
+                            : '✅ Active'
+                          }
+                        </div>
+                      </div>
+                      
+                      <p className="assignment-description">{assignment.description}</p>
+                      
+                      <div className="assignment-meta">
+                        <div className="meta-item">
+                          <span className="meta-icon">📅</span>
+                          <span className="meta-text">Due: {formatDate(assignment.dueDate)}</span>
+                        </div>
+                        <div className="meta-item">
+                          <span className="meta-icon">🆔</span>
+                          <span className="meta-text">ID: {assignment.id}</span>
+                        </div>
+                      </div>
+
+                      {daysUntilDue >= 0 && (
+                        <div className="days-remaining-banner">
+                          <span className="days-count">{daysUntilDue}</span>
+                          <span className="days-label">day{daysUntilDue !== 1 ? 's' : ''} remaining</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Submission Form */}
+                    <div className="submission-form">
+                      <div className="form-card">
+                        <div className="form-header">
+                          <h4 className="form-title">
+                            <span className="form-icon">📎</span>
+                            Submit Your Work
+                          </h4>
+                        </div>
+                        
+                        <div className="form-content">
+                          <div className="input-wrapper">
+                            <input
+                              type="url"
+                              value={fileUrls[assignment.id] || ''}
+                              onChange={(e) => setFileUrls(prev => ({
+                                ...prev,
+                                [assignment.id]: e.target.value
+                              }))}
+                              placeholder="Paste your file URL here (Google Drive, GitHub, etc.)"
+                              className="url-input"
+                              disabled={isSubmitting}
+                            />
+                            <div className="input-focus-border"></div>
+                          </div>
+                          
+                          <button
+                            onClick={() => handleSubmit(assignment.id, assignment.title)}
+                            disabled={isSubmitting || !fileUrls[assignment.id]?.trim()}
+                            className={`submit-assignment-btn ${
+                              (isSubmitting || !fileUrls[assignment.id]?.trim()) 
+                                ? 'disabled' 
+                                : ''
+                            }`}
+                          >
+                            {isSubmitting ? (
+                              <div className="btn-loading">
+                                <div className="loading-spinner">
+                                  <div className="spinner-ring">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                  </div>
+                                </div>
+                                <span>Submitting...</span>
+                              </div>
+                            ) : (
+                              <div className="btn-content">
+                                <span className="btn-icon">🚀</span>
+                                <span>Submit Assignment</span>
+                                <span className="btn-arrow">→</span>
+                              </div>
+                            )}
+                          </button>
+                        </div>
+                        
+                        <div className="form-tip">
+                          <span className="tip-icon">💡</span>
+                          <span className="tip-text">Make sure your file is publicly accessible!</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-gray-600 font-medium">Total Assignments</div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Stats Section */}
+        {assignments.length > 0 && (
+          <div className="stats-section">
+            <div className="stats-card">
+              <div className="stats-background">
+                <div className="stats-glow"></div>
               </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-green-600">
-                  {assignments.filter(a => !isOverdue(a.dueDate)).length}
+              
+              <div className="stats-content">
+                <h3 className="stats-title">
+                  <span className="stats-icon">📊</span>
+                  <span>Your Progress</span>
+                </h3>
+                
+                <div className="stats-grid">
+                  <div className="stat-item">
+                    <div className="stat-icon total">📝</div>
+                    <div className="stat-value">{assignments.length}</div>
+                    <div className="stat-label">Total Assignments</div>
+                  </div>
+                  
+                  <div className="stat-item">
+                    <div className="stat-icon active">✅</div>
+                    <div className="stat-value">{assignments.filter(a => !isOverdue(a.dueDate)).length}</div>
+                    <div className="stat-label">Active</div>
+                  </div>
+                  
+                  <div className="stat-item">
+                    <div className="stat-icon urgent">⚡</div>
+                    <div className="stat-value">
+                      {assignments.filter(a => {
+                        const days = getDaysUntilDue(a.dueDate);
+                        return days <= 3 && days > 0;
+                      }).length}
+                    </div>
+                    <div className="stat-label">Due Soon</div>
+                  </div>
+                  
+                  <div className="stat-item">
+                    <div className="stat-icon overdue">⏰</div>
+                    <div className="stat-value">{assignments.filter(a => isOverdue(a.dueDate)).length}</div>
+                    <div className="stat-label">Overdue</div>
+                  </div>
                 </div>
-                <div className="text-gray-600 font-medium">Active</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-yellow-600">
-                  {assignments.filter(a => {
-                    const days = getDaysUntilDue(a.dueDate);
-                    return days <= 3 && days > 0;
-                  }).length}
-                </div>
-                <div className="text-gray-600 font-medium">Due Soon</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-red-600">
-                  {assignments.filter(a => isOverdue(a.dueDate)).length}
-                </div>
-                <div className="text-gray-600 font-medium">Overdue</div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Tips Section */}
-      <div className="mt-8">
-        <div className="card bg-gradient-to-r from-blue-50 to-purple-50">
-          <h3 className="font-display text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <span className="mr-2">💡</span>
-            Submission Tips
-          </h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li className="flex items-start">
-              <span className="mr-2 mt-1">🔗</span>
-              <span>Use Google Drive, Dropbox, GitHub, or any public file sharing service</span>
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 mt-1">👀</span>
-              <span>Make sure your file permissions are set to "Anyone with the link can view"</span>
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 mt-1">⏰</span>
-              <span>Submit early to avoid last-minute technical issues</span>
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2 mt-1">📝</span>
-              <span>Double-check your work before submitting</span>
-            </li>
-          </ul>
+        {/* Tips Section */}
+        <div className="tips-section">
+          <div className="tips-card">
+            <div className="tips-header">
+              <h3 className="tips-title">
+                <span className="tips-icon">💡</span>
+                Submission Tips
+              </h3>
+            </div>
+            
+            <div className="tips-grid">
+              <div className="tip-item">
+                <div className="tip-icon-wrapper">
+                  <span className="tip-emoji">🔗</span>
+                </div>
+                <div className="tip-content">
+                  <h4 className="tip-title">File Sharing</h4>
+                  <p className="tip-description">Use Google Drive, Dropbox, GitHub, or any public file sharing service</p>
+                </div>
+              </div>
+              
+              <div className="tip-item">
+                <div className="tip-icon-wrapper">
+                  <span className="tip-emoji">👀</span>
+                </div>
+                <div className="tip-content">
+                  <h4 className="tip-title">Permissions</h4>
+                  <p className="tip-description">Set file permissions to "Anyone with the link can view"</p>
+                </div>
+              </div>
+              
+              <div className="tip-item">
+                <div className="tip-icon-wrapper">
+                  <span className="tip-emoji">⏰</span>
+                </div>
+                <div className="tip-content">
+                  <h4 className="tip-title">Early Submission</h4>
+                  <p className="tip-description">Submit early to avoid last-minute technical issues</p>
+                </div>
+              </div>
+              
+              <div className="tip-item">
+                <div className="tip-icon-wrapper">
+                  <span className="tip-emoji">📝</span>
+                </div>
+                <div className="tip-content">
+                  <h4 className="tip-title">Double Check</h4>
+                  <p className="tip-description">Review your work carefully before submitting</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

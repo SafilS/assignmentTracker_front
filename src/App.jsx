@@ -9,7 +9,7 @@ import LandingPage from './components/LandingPage';
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen">
+      <div className="container">
         <Navibar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
