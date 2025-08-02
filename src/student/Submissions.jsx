@@ -18,7 +18,7 @@ function Submissions() {
       const res = await axios.get('/assignments');
       setAssignments(res.data);
     } catch (error) {
-      setError('Failed to load assignments 😅');
+      setError('Failed to load assignments ');
     } finally {
       setIsLoading(false);
     }
@@ -39,7 +39,7 @@ function Submissions() {
         assignment: { id: assignmentId },
         fileUrl: fileUrl.trim(),
       });
-      setSuccessMessage(`Successfully submitted "${assignmentTitle}"! 🎉`);
+      setSuccessMessage(`Successfully submitted "${assignmentTitle}"! `);
       setFileUrls(prev => ({ ...prev, [assignmentId]: '' }));
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
@@ -117,7 +117,7 @@ function Submissions() {
           </h1>
           <p className="header-subtitle">
             Submit your assignments and track your progress
-            <span className="subtitle-emoji">🚀</span>
+            <span className="subtitle-emoji"></span>
           </p>
         </div>
 
@@ -137,7 +137,7 @@ function Submissions() {
 
         {successMessage && (
           <div className="message-banner success-banner">
-            <span className="message-icon">🎉</span>
+            <span className="message-icon"></span>
             <span className="message-text">{successMessage}</span>
             <button 
               onClick={() => setSuccessMessage('')}
@@ -323,7 +323,7 @@ function Submissions() {
                               </div>
                             ) : (
                               <div className="btn-content">
-                                <span className="btn-icon">🚀</span>
+                                <span className="btn-icon"></span>
                                 <span>Submit Assignment</span>
                                 <span className="btn-arrow">→</span>
                               </div>
@@ -332,7 +332,7 @@ function Submissions() {
                         </div>
                         
                         <div className="form-tip">
-                          <span className="tip-icon">💡</span>
+                          <span className="tip-icon"></span>
                           <span className="tip-text">Make sure your file is publicly accessible!</span>
                         </div>
                       </div>
