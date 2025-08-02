@@ -27,7 +27,7 @@ function Login() {
       console.log(role);
       navigate(role === 'ROLE_TEACHER' ? '/teacher' : '/submissions/student');
     } catch (error) {
-      setError('Invalid credentials. Please try again! 😅');
+      setError('Invalid credentials. Please try again!');
     } finally {
       setIsLoading(false);
     }
@@ -47,16 +47,13 @@ function Login() {
       <div className="auth-card">
         {/* Header */}
         <div className="auth-header">
-          <div className="auth-icon login-icon">
-            <span>🔑</span>
-          </div>
           <h1 className="auth-title">
             <span className="title-main">Welcome</span>
             <span className="title-gradient">Back!</span>
           </h1>
           <p className="auth-subtitle">
             Sign in to continue your learning journey
-            <span className="subtitle-emoji">🚀</span>
+            <span className="subtitle-emoji"></span>
           </p>
         </div>
 
@@ -72,7 +69,7 @@ function Login() {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">👤</span>
+              <span className="label-icon"></span>
               Username
             </label>
             <div className="input-wrapper">
@@ -90,7 +87,7 @@ function Login() {
 
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">🔒</span>
+              <span className="label-icon"></span>
               Password
             </label>
             <div className="input-wrapper password-wrapper">
@@ -132,7 +129,7 @@ function Login() {
               </div>
             ) : (
               <div className="btn-content">
-                <span className="btn-icon">🎉</span>
+                <span className="btn-icon"></span>
                 <span>Sign In</span>
                 <span className="btn-arrow">→</span>
               </div>
@@ -151,17 +148,17 @@ function Login() {
             Don't have an account?{' '}
             <Link to="/register" className="auth-link register-link">
               <span>Create one here!</span>
-              <span className="link-emoji">✨</span>
+              <span className="link-emoji"></span>
             </Link>
           </p>
         </div>
 
         {/* Fun Elements */}
-        <div className="auth-decorations">
+        {/* <div className="auth-decorations">
           <span className="decoration-emoji" style={{ animationDelay: '0s' }}>📚</span>
           <span className="decoration-emoji" style={{ animationDelay: '0.5s' }}>🎓</span>
           <span className="decoration-emoji" style={{ animationDelay: '1s' }}>✏️</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

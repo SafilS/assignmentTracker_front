@@ -47,14 +47,14 @@ function Navibar() {
                 to="/login"
                 className={`nav-link ${isActive('/login') ? 'active' : ''}`}
               >
-                <span className="nav-icon">🔑</span>
+                <span className="nav-icon"></span>
                 Login
               </Link>
               <Link
                 to="/register"
                 className={`nav-link register-btn ${isActive('/register') ? 'active' : ''}`}
               >
-                <span className="nav-icon">✨</span>
+                <span className="nav-icon"></span>
                 Get Started
               </Link>
             </>

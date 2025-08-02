@@ -67,7 +67,7 @@ function LandingPage() {
         
         <div className="hero-content">
           <div className="hero-badge">
-            <span className="badge-icon">🚀</span>
+            <span className="badge-icon"></span>
             <span>Welcome to the Future of Education</span>
           </div>
           
@@ -87,12 +87,12 @@ function LandingPage() {
             {!isLoggedIn ? (
               <>
                 <Link to="/register" className="btn btn-primary hero-btn">
-                  <span className="btn-icon">✨</span>
+                  <span className="btn-icon"></span>
                   <span>Start Your Journey</span>
                   <span className="btn-arrow">→</span>
                 </Link>
                 <Link to="/login" className="btn btn-secondary hero-btn">
-                  <span className="btn-icon">🔑</span>
+                  <span className="btn-icon"></span>
                   <span>Sign In</span>
                 </Link>
               </>

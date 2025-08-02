@@ -18,7 +18,7 @@ function Assignments() {
       const res = await axios.get('/assignments');
       setAssignments(res.data);
     } catch (error) {
-      setError('Failed to load assignments 😅');
+      setError('Failed to load assignments ');
     } finally {
       setIsLoading(false);
     }
@@ -41,7 +41,7 @@ function Assignments() {
     } catch (error) {
       console.error('Error response:', error.response);
       console.error('Error message:', error.message);
-      setError('Failed to create assignment 😅');
+      setError('Failed to create assignment ');
     } finally {
       setIsCreating(false);
     }
@@ -170,7 +170,7 @@ function Assignments() {
             <div className="form-card">
               <div className="form-header">
                 <div className="form-icon">
-                  <span>✨</span>
+                  <span></span>
                 </div>
                 <h2 className="form-title">Create New Assignment</h2>
               </div>

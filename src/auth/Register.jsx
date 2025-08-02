@@ -47,9 +47,9 @@ function Register() {
             Your account has been created successfully!
           </p>
           <div className="success-animation">
-            <div className="celebration-emoji">🚀</div>
-            <div className="celebration-emoji">✨</div>
-            <div className="celebration-emoji">🎊</div>
+            <div className="celebration-emoji"></div>
+            <div className="celebration-emoji"></div>
+            <div className="celebration-emoji"></div>
           </div>
           <div className="countdown">
             <div className="countdown-spinner"></div>
@@ -74,9 +74,7 @@ function Register() {
       <div className="auth-card register-card">
         {/* Header */}
         <div className="auth-header">
-          <div className="auth-icon register-icon">
-            <span>✨</span>
-          </div>
+
           <h1 className="auth-title">
             <span className="title-main">Join</span>
             <span className="title-gradient">EduHub!</span>
@@ -99,7 +97,7 @@ function Register() {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">👤</span>
+              <span className="label-icon"></span>
               Username
             </label>
             <div className="input-wrapper">
@@ -117,7 +115,7 @@ function Register() {
 
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">🔒</span>
+              <span className="label-icon"></span>
               Password
             </label>
             <div className="input-wrapper password-wrapper">
@@ -142,7 +140,7 @@ function Register() {
 
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">🎭</span>
+              <span className="label-icon"></span>
               I am a...
             </label>
             <div className="input-wrapper">
@@ -181,7 +179,7 @@ function Register() {
               </div>
             ) : (
               <div className="btn-content">
-                <span className="btn-icon">🚀</span>
+                <span className="btn-icon"></span>
                 <span>Create Account</span>
                 <span className="btn-arrow">→</span>
               </div>
@@ -200,17 +198,17 @@ function Register() {
             Already have an account?{' '}
             <Link to="/login" className="auth-link login-link">
               <span>Sign in here!</span>
-              <span className="link-emoji">🔑</span>
+              <span className="link-emoji"></span>
             </Link>
           </p>
         </div>
 
         {/* Fun Elements */}
-        <div className="auth-decorations">
+        {/* <div className="auth-decorations">
           <span className="decoration-emoji" style={{ animationDelay: '0s' }}>🌟</span>
           <span className="decoration-emoji" style={{ animationDelay: '0.5s' }}>📖</span>
           <span className="decoration-emoji" style={{ animationDelay: '1s' }}>🎨</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );
